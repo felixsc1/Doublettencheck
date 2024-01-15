@@ -13,4 +13,5 @@ produces an output in the same folder of the master file with suffix *_doublette
 
 ## Developer remarks
 
-Needs `sudo apt install python3.12-tk`
+Under linux needs `sudo apt install python3.12-tk`
+To create a new exe file from the source code: `pyinstaller --onefile --windowed gui.py`  (should be done in windows)
