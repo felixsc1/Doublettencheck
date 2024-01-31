@@ -5,23 +5,24 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 
 def extract_reference_ids(folder_path):
     """
-    Extract ReferenceID from all sheets of all Excel files in the specified folder.
+    Extract ReferenceID from all sheets of all Excel files in the specified folder and its subfolders.
     """
     reference_ids = set()
 
-    for file in os.listdir(folder_path):
-        if file.endswith('.xlsx'):
-            file_path = os.path.join(folder_path, file)
-            try:
-                # Open the Excel file
-                with pd.ExcelFile(file_path, engine='openpyxl') as xls:
-                    # Iterate over all sheets
-                    for sheet_name in xls.sheet_names:
-                        df = pd.read_excel(xls, sheet_name=sheet_name)
-                        if 'ReferenceID' in df.columns:
-                            reference_ids.update(df['ReferenceID'].dropna().unique())
-            except Exception as e:
-                print(f"Error reading {file_path}: {e}")
+    for root, dirs, files in os.walk(folder_path):
+        for file in files:
+            if file.endswith('.xlsx'):
+                file_path = os.path.join(root, file)
+                try:
+                    # Open the Excel file
+                    with pd.ExcelFile(file_path, engine='openpyxl') as xls:
+                        # Iterate over all sheets
+                        for sheet_name in xls.sheet_names:
+                            df = pd.read_excel(xls, sheet_name=sheet_name)
+                            if 'ReferenceID' in df.columns:
+                                reference_ids.update(df['ReferenceID'].dropna().unique())
+                except Exception as e:
+                    print(f"Error reading {file_path}: {e}")
 
     return reference_ids
 
