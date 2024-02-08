@@ -27,9 +27,12 @@ def extract_reference_ids(folder_path):
     return reference_ids
 
 
-def highlight_matches_in_excel(file_path, reference_ids):
+def highlight_matches_in_excel(file_path, reference_ids, typ):
     # Read the Excel file
     df = pd.read_excel(file_path, engine='openpyxl')
+
+    # Filter the DataFrame by including rows where the "Typ" column matches any of the entries in the list
+    df = df[df['Typ'].isin(typ)]
 
     # Counters
     match_count = 0
@@ -67,6 +70,7 @@ def highlight_matches_in_excel(file_path, reference_ids):
 
     # Print the number of matches and total length
     print(f"Total rows: {total_count}, Matching rows: {match_count}")
+    print(f"{match_count / total_count * 100:.2f}% of Doubletten found.")
 
 
 
